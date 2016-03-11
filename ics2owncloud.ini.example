@@ -1,0 +1,12 @@
+[DEFAULT]
+username: tom
+password: 123456
+server: https://cloud.example.com/
+
+[import_a]
+calendar: calendar_xy
+ics_url: https://USER1:XXX@cloud.owncloud.org/index.php/apps/calendar/export.php?calid=6
+
+[import_b]
+calendar: facebook
+ics_url: https://www.facebook.com/ical/u.php?uid=10000123456789&key=ABCDEFGHIJKL
