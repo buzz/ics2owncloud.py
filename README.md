@@ -1,6 +1,7 @@
 # ics2owncloud.py
 
-Periodically download iCal files and import them using ownClouds CalDAV interface.
+Downloads iCal files and imports them using the ownClouds CalDAV
+interface.
 
 ## Requirements
 
@@ -8,7 +9,7 @@ Periodically download iCal files and import them using ownClouds CalDAV interfac
 
 ## Installation
 
-    $ git clone https://git@github.com:buzz/ics2owncloud.py.git
+    $ git clone https://github.com/buzz/ics2owncloud.py.git
 
 ## Configuration
 
@@ -16,7 +17,7 @@ Periodically download iCal files and import them using ownClouds CalDAV interfac
 
 Create and edit config file:
 
-    cp ics2download.ini.example ~/.ics2download.ini
+    cp ics2owncloud.ini.example ~/.ics2owncloud.ini
 
 A config file with two entries looks like this:
 
