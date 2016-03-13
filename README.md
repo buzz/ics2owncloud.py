@@ -46,9 +46,13 @@ A config file with two entries looks like this:
 
 * `username` - ownCloud user
 * `password` - ownCloud password
-* `server` - ownCloud server URI
+* `server` - ownCloud server URL
 * `calender` - ownCloud calendar name
 * `ics_url` - URL to the ICS file to download (can have username:password format)
+
+Don't forget to protect your config file:
+
+    $ chmod 600 ~/.ics2owncloud.ini
 
 ### Cron job
 
