@@ -1,7 +1,9 @@
 # ics2owncloud.py
 
-Downloads iCal files and imports them using the ownClouds CalDAV
-interface.
+After [this solution](http://zeit-zu-handeln.net/2014/02/allgemein/owncloud-6-kalender-ical-feeds-importierenexportieren/)
+stopped working in ownCloud 9 I had to come up with something else to make periodical iCal imports work.
+
+This script downloads iCal files and imports them into ownCloud using CalDAV.
 
 ## Requirements
 
@@ -33,7 +35,6 @@ A config file with two entries looks like this:
     [import_b]
     calendar: facebook
     ics_url: https://www.facebook.com/ical/u.php?uid=10000123456789&key=ABCDEFGHIJKL
-
 
 * `username` - ownCloud user
 * `password` - ownCloud password
