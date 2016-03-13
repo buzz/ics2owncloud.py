@@ -1,7 +1,10 @@
 # ics2owncloud.py
 
-After [this solution](http://zeit-zu-handeln.net/2014/02/allgemein/owncloud-6-kalender-ical-feeds-importierenexportieren/)
-stopped working in ownCloud 9 I had to come up with something else to make periodical iCal imports work.
+Before ownCloud 9 I was using something like
+[this](https://www.birchpress.com/forums/topic/import-calendar-to-owncloud)
+to automatically import iCal files to ownCloud. But this stopped
+working in ownCloud 9. So I had to come up with something else to make
+periodical iCal imports work.
 
 This script downloads iCal files and imports them into ownCloud using CalDAV.
 
