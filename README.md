@@ -8,6 +8,11 @@ This script downloads iCal files and imports them into ownCloud using CalDAV.
 ## Requirements
 
 * Virtualenv
+* [Ics.py](https://github.com/C4ptainCrunch/ics.py)
+* [Requests](http://www.python-requests.org/)
+
+Just make sure the `virtualenv` command is in `$PATH` when running
+`ics2owncloud.sh`. Ics.py and Requests are installed automatically.
 
 ## Installation
 
