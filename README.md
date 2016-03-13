@@ -59,3 +59,10 @@ A cron job comes in handy to periodically import calendars:
 This runs the script every 30 minutes:
 
     */30 * * * * /PATH/TO/ics2owncloud.sh >/dev/null
+
+## Known issues
+
+Imported full-day events become normal events spanning 24 hours after
+import.
+
+*Pull requests welcome!*
