@@ -25,7 +25,7 @@ def do_import(username, password, calendar, server, ics_url):
     if r.status_code == 500:
       # ignore the NoInstancesException
       if 'Sabre\VObject\Recur\NoInstancesException' in r.text:
-        print('No valid instances: %s' % e.uid, file=sys.stderr)
+        print('No valid instances: %s' % e.uid, file=sys.stdout)
       else:
         r.raise_for_status()
     elif r.status_code == 201 or r.status_code == 204:
