@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from __future__ import print_function
 import string
 import random
@@ -23,8 +22,16 @@ def do_import(username, password, calendar, server, ics_url):
                      auth=(username, password),
                      headers={'content-type':'text/calendar; charset=UTF-8'}
                      )
-    r.raise_for_status()
-    print('Imported: %s (%d)' % (e.uid, r.status_code), file=sys.stdout)
+    if r.status_code == 500:
+      # ignore the NoInstancesException
+      if 'Sabre\VObject\Recur\NoInstancesException' in r.text:
+        print('No valid instances: %s' % e.uid, file=sys.stderr)
+      else:
+        r.raise_for_status()
+    elif r.status_code == 201 or r.status_code == 204:
+      print('Imported: %s (%d)' % (e.uid, r.status_code), file=sys.stdout)
+    else:
+      print('Import failed: %s (%d)' % (e.uid, r.status_code), file=sys.stderr)
 
 if __name__ == '__main__':
   Config = ConfigParser.ConfigParser()
