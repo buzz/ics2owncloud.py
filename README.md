@@ -1,23 +1,25 @@
 # ics2owncloud.py
 
-Before ownCloud 9 I was using something like
+This script downloads iCal files and imports them to ownCloud using CalDAV.
+
+Before ownCloud 9.0 I was using something like
 [this](https://www.birchpress.com/forums/topic/import-calendar-to-owncloud)
-to automatically import iCal files to ownCloud. But this stopped
-working in ownCloud 9. So I had to come up with something else to make
+to automatically import iCal files. After the rewrite of the calendar app
+this stopped working. So I had to come up with something else to make
 Webcal/iCal subscriptions work.
 
-This script downloads iCal files and imports them into ownCloud using CalDAV.
+This is [being worked](https://github.com/owncloud/calendar/issues/132) on in the official calendar app.
 
-This is being worked on in the official calendar app: [owncloud/calendar#132](https://github.com/owncloud/calendar/issues/132)
+*Pull requests welcome!*
 
 ## Requirements
 
 * Virtualenv
-* [Ics.py](https://github.com/C4ptainCrunch/ics.py)
+* [icalendar](https://icalendar.readthedocs.org/) for Python
 * [Requests](http://www.python-requests.org/)
 
 Just make sure the `virtualenv` command is in `$PATH` when running
-`ics2owncloud.sh`. Ics.py and Requests are installed automatically.
+`ics2owncloud.sh`. icalendar and Requests are installed automatically.
 
 ## Installation
 
@@ -66,9 +68,3 @@ This runs the script every 30 minutes:
 
     */30 * * * * /PATH/TO/ics2owncloud.sh >/dev/null
 
-## Known issues
-
-Imported full-day events become normal events spanning 24 hours after
-import.
-
-*Pull requests welcome!*
