@@ -4,9 +4,11 @@ Before ownCloud 9 I was using something like
 [this](https://www.birchpress.com/forums/topic/import-calendar-to-owncloud)
 to automatically import iCal files to ownCloud. But this stopped
 working in ownCloud 9. So I had to come up with something else to make
-periodical iCal imports work.
+Webcal/iCal subscriptions work.
 
 This script downloads iCal files and imports them into ownCloud using CalDAV.
+
+This is being worked on in the official calendar app: [owncloud/calendar#132](https://github.com/owncloud/calendar/issues/132)
 
 ## Requirements
 
