@@ -8,7 +8,7 @@ to automatically import iCal files. After the rewrite of the calendar app
 this stopped working. So I had to come up with something else to make
 Webcal/iCal subscriptions work.
 
-This is [being worked](https://github.com/owncloud/calendar/issues/132) on in the official calendar app.
+Webcal subsciptions are also [being worked on](https://github.com/owncloud/calendar/issues/132) in the official calendar app. Once the functionality is available this script becomes obsolete.
 
 *Pull requests welcome!*
 
