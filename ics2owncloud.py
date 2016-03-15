@@ -7,7 +7,7 @@ from os.path import expanduser, join
 import sys
 
 import requests
-from ics import Calendar
+from icalendar.cal import Calendar
 
 
 CALDAVURL = '%sremote.php/dav/calendars/%s/%s'
@@ -17,49 +17,45 @@ def do_import(username, password, calendar, server, ics_url):
 
   # fetch events from target cal
   target_fetch_url = '%s?export' % base_url
-  target_cal = Calendar(
-    requests.get(target_fetch_url, auth=(username, password)).text)
-  existing_uids = [e.uid for e in target_cal.events]
+  ical_text = requests.get(target_fetch_url, auth=(username, password)).text
+  target_cal = Calendar.from_ical(ical_text)
+  existing_uids = [e['UID'].to_ical() for e in target_cal.walk('VEVENT')]
 
   # fetch webcal
-  c = Calendar(requests.get(ics_url).text)
+  c = Calendar.from_ical(requests.get(ics_url).text)
 
   # import webcal
   imported_uids = []
-  for e in c.events:
-    caldata = str(Calendar(events=[e]))
-    target_url = '%s/%s.ics' % (base_url, e.uid)
-    r = requests.put(target_url,
-                     data=caldata,
+  for e in c.walk('VEVENT'):
+    uid = e['UID'].to_ical()
+    cal = Calendar()
+    cal.add_component(e)
+    r = requests.put('%s/%s.ics' % (base_url, uid),
+                     data=cal.to_ical(),
                      auth=(username, password),
                      headers={'content-type':'text/calendar; charset=UTF-8'}
                      )
-    if r.status_code == 500:
+    if r.status_code == 500 and 'Sabre\VObject\Recur\NoInstancesException' in r.text:
       # ignore the NoInstancesException
-      if 'Sabre\VObject\Recur\NoInstancesException' in r.text:
-        print('No valid instances: %s' % e.uid, file=sys.stdout)
-      else:
-        r.raise_for_status()
+      print('Warning: No valid instances: %s' % uid, file=sys.stdout)
     elif r.status_code == 201 or r.status_code == 204:
-      print('Imported: %s (%d)' % (e.uid, r.status_code), file=sys.stdout)
-      imported_uids.append(e.uid)
+      print('Imported: %s (%d)' % (uid, r.status_code), file=sys.stdout)
+      imported_uids.append(uid)
     else:
-      raise Exception('Import failed: %s (%d)' % (e.uid, r.status_code))
+      r.raise_for_status()
 
   # remove events not in webcal
   for uid in existing_uids:
     if not uid in imported_uids:
-      target_url = '%s/%s.ics' % (base_url, uid)
-      r = requests.delete(target_url,
-                          data=caldata,
-                          auth=(username, password)
-                          )
-      r.raise_for_status()
+      r = requests.delete('%s/%s.ics' % (base_url, uid),
+                          auth=(username, password))
       if r.status_code == 204:
         print('Deleted %s' % uid, file=sys.stdout)
+        # ignore 404 - not found (seems to be a manually created event)
+      elif r.status_code == 404:
+        pass
       else:
-        raise Exception('Unexpected return code while deleting: %s (%d)'
-                        % (e.uid, r.status_code))
+        r.raise_for_status()
 
 if __name__ == '__main__':
   Config = ConfigParser.ConfigParser()
@@ -73,6 +69,5 @@ if __name__ == '__main__':
                 Config.get(key, 'ics_url'),
                 )
     except Exception as e:
-      print(e, file=sys.stderr)
-      print('Error: Could not import: %s' % Config.get(key, 'ics_url'),
-            file=sys.stderr)
+      import traceback
+      traceback.print_exc(file=sys.stderr)
