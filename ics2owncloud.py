@@ -17,8 +17,16 @@ def do_import(username, password, calendar, server, ics_url):
 
   # fetch events from target cal
   target_fetch_url = '%s?export' % base_url
-  ical_text = requests.get(target_fetch_url, auth=(username, password)).text
-  target_cal = Calendar.from_ical(ical_text)
+  r = requests.get(target_fetch_url, auth=(username, password))
+  r.raise_for_status()
+  try:
+    target_cal = Calendar.from_ical(r.text)
+  except ValueError as e:
+    print('Warning: Could not parse iCal (%s)' % target_fetch_url,
+          file=sys.stderr)
+    print(e, file=sys.stderr)
+    return
+
   existing_uids = [e['UID'].to_ical() for e in target_cal.walk('VEVENT')]
 
   # fetch webcal
