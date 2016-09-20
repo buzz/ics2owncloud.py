@@ -40,6 +40,7 @@ A config file with two entries looks like this:
     password: 123456
     ldapuser: None
     server: https://cloud.example.com/
+    verify_certificates: True
 
     [import_a]
     calendar: calendar_xy
@@ -55,10 +56,17 @@ A config file with two entries looks like this:
 * `server` - ownCloud server URL
 * `calender` - ownCloud calendar name
 * `ics_url` - URL to the ICS file to download (can have username:password format)
+* `verify_certificates` - whether the certificates should be validated
+
 
 Don't forget to protect your config file:
 
     $ chmod 600 ~/.ics2owncloud.ini
+
+
+If your upload or download server has an invalid or expired certificate, you can set `verify_certificates` to False
+to keep the script running until the server setup can be fixed.
+
 
 ### Cron job
 
