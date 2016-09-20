@@ -12,14 +12,14 @@ from icalendar.cal import Calendar
 
 CALDAVURL = '%sremote.php/dav/calendars/%s/%s'
 
-def do_import(username, ldapuser, password, calendar, server, ics_url):
+def do_import(username, ldapuser, password, calendar, server, ics_url, verify_certificates):
   if ldapuser == None:
     ldapuser = username
   base_url = CALDAVURL % (server, ldapuser, calendar)
 
   # fetch events from target cal
   target_fetch_url = '%s?export' % base_url
-  r = requests.get(target_fetch_url, auth=(username, password))
+  r = requests.get(target_fetch_url, auth=(username, password), verify=verify_certificates)
   r.raise_for_status()
   try:
     target_cal = Calendar.from_ical(r.text)
@@ -43,7 +43,8 @@ def do_import(username, ldapuser, password, calendar, server, ics_url):
     r = requests.put('%s/%s.ics' % (base_url, uid),
                      data=cal.to_ical(),
                      auth=(username, password),
-                     headers={'content-type':'text/calendar; charset=UTF-8'}
+                     headers={'content-type':'text/calendar; charset=UTF-8'},
+                     verify=verify_certificates
                      )
     if r.status_code == 500 and 'Sabre\VObject\Recur\NoInstancesException' in r.text:
       # ignore the NoInstancesException
@@ -58,7 +59,8 @@ def do_import(username, ldapuser, password, calendar, server, ics_url):
   for uid in existing_uids:
     if not uid in imported_uids:
       r = requests.delete('%s/%s.ics' % (base_url, uid),
-                          auth=(username, password))
+                          auth=(username, password),
+                          verify=verify_certificates)
       if r.status_code == 204:
         print('Deleted %s' % uid, file=sys.stdout)
         # ignore 404 - not found (seems to be a manually created event)
@@ -71,6 +73,15 @@ if __name__ == '__main__':
   Config = ConfigParser.ConfigParser()
   Config.read(join(expanduser('~'), '.ics2owncloud.ini'))
   for key in Config.sections():
+    verify_certificates=True
+    try:
+      verify_certificates=Config.getboolean(key, 'verify_certificates')
+    except ConfigParser.NoOptionError as noe:
+      verify_certificates=True
+    except Exception as e:
+      import traceback
+      traceback.print_exc(file=sys.stderr)
+
     try:
       do_import(Config.get(key, 'username'),
                 Config.get(key, 'ldapuser'),
@@ -78,6 +89,7 @@ if __name__ == '__main__':
                 Config.get(key, 'calendar'),
                 Config.get(key, 'server'),
                 Config.get(key, 'ics_url'),
+                verify_certificates,
                 )
     except Exception as e:
       import traceback
