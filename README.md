@@ -38,7 +38,6 @@ A config file with two entries looks like this:
     [DEFAULT]
     username: tom
     password: 123456
-    ldapuser: None
     server: https://cloud.example.com/
 
     [import_a]
@@ -51,7 +50,6 @@ A config file with two entries looks like this:
 
 * `username` - ownCloud user
 * `password` - ownCloud password
-* `ldapuser` - Replaces username in ownCloud's calender url, only needed if ownCloud requires uuids (ex. for ldap)
 * `server` - ownCloud server URL
 * `calender` - ownCloud calendar name
 * `ics_url` - URL to the ICS file to download (can have username:password format)
