@@ -1,7 +1,6 @@
 [DEFAULT]
 username: tom
 password: 123456
-ldapuser: None
 server: https://cloud.example.com/
 
 [import_a]

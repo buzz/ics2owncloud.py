@@ -12,10 +12,8 @@ from icalendar.cal import Calendar
 
 CALDAVURL = '%sremote.php/dav/calendars/%s/%s'
 
-def do_import(username, ldapuser, password, calendar, server, ics_url):
-  if ldapuser == None:
-    ldapuser = username
-  base_url = CALDAVURL % (server, ldapuser, calendar)
+def do_import(username, password, calendar, server, ics_url):
+  base_url = CALDAVURL % (server, username, calendar)
 
   # fetch events from target cal
   target_fetch_url = '%s?export' % base_url
@@ -73,7 +71,6 @@ if __name__ == '__main__':
   for key in Config.sections():
     try:
       do_import(Config.get(key, 'username'),
-                Config.get(key, 'ldapuser'),
                 Config.get(key, 'password'),
                 Config.get(key, 'calendar'),
                 Config.get(key, 'server'),
