@@ -1,5 +1,9 @@
 # ics2owncloud.py
 
+**THIS SCRIPT IS DEPRECATED.** 
+
+**ownCloud/Nextcloud calendar app supports calendar subscriptions now. This script was only a stop-gap. So please don't use it anymore.**
+
 This script downloads iCal files and imports them to ownCloud using CalDAV.
 
 Before ownCloud 9.0 I was using something like
