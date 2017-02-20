@@ -39,6 +39,7 @@ def do_import(username, password, calendar, server, ics_url):
   imported_uids = []
   for e in c.walk('VEVENT'):
     uid = e['UID'].to_ical()
+    uid = uid.replace('/','slash')
     cal = Calendar()
     cal.add_component(e)
     r = requests.put('%s/%s.ics' % (base_url, uid),
