@@ -30,12 +30,16 @@ def do_import(username, password, calendar, server, ics_url):
   existing_uids = [e['UID'].to_ical() for e in target_cal.walk('VEVENT')]
 
   # fetch webcal
-  c = Calendar.from_ical(requests.get(ics_url).text)
+  sourceRequest = requests.get(ics_url)
+  sourceRequest.encoding = 'utf-8'
+  sourceContent = sourceRequest.text
+  c = Calendar.from_ical(sourceContent)
 
   # import webcal
   imported_uids = []
   for e in c.walk('VEVENT'):
     uid = e['UID'].to_ical()
+    uid = uid.replace('/','slash')
     cal = Calendar()
     cal.add_component(e)
     r = requests.put('%s/%s.ics' % (base_url, uid),
