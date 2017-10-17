@@ -1,20 +1,12 @@
 # ics2owncloud.py
 
-**THIS SCRIPT IS DEPRECATED.** 
-
-**ownCloud/Nextcloud calendar app supports calendar subscriptions now. This script was only a stop-gap. So please don't use it anymore.**
-
 This script downloads iCal files and imports them to ownCloud using CalDAV.
 
-Before ownCloud 9.0 I was using something like
-[this](https://www.birchpress.com/forums/topic/import-calendar-to-owncloud)
-to automatically import iCal files. After the rewrite of the calendar app
-this stopped working. So I had to come up with something else to make
-Webcal/iCal subscriptions work.
-
-Webcal subsciptions are also [being worked on](https://github.com/owncloud/calendar/issues/132) in the official calendar app. Once the functionality is available this script becomes obsolete.
-
 *Pull requests welcome!*
+
+## Important note
+
+The calendar app supports calendar subscriptions for some time now. However these calendars can't be sync'd to your devices. If you need this you can still use this script to import events to "normal" calendars that are available for sync'ing.
 
 ## Requirements
 
