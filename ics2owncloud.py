@@ -70,7 +70,7 @@ def do_import(username, password, calendar, server, ics_url):
         r.raise_for_status()
 
 if __name__ == '__main__':
-  Config = ConfigParser.RawConfigParser()
+  Config = configparser.RawConfigParser()
   Config.read(join(expanduser('~'), '.ics2owncloud.ini'))
   for key in Config.sections():
     try:
