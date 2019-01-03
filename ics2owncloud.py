@@ -1,8 +1,7 @@
-#!/usr/bin/env python2.7
-from __future__ import print_function
+#!/usr/bin/env python3
 import string
 import random
-import ConfigParser
+import configparser
 from os.path import expanduser, join
 import sys
 
@@ -38,8 +37,9 @@ def do_import(username, password, calendar, server, ics_url):
   # import webcal
   imported_uids = []
   for e in c.walk('VEVENT'):
-    uid = e['UID'].to_ical()
-    uid = uid.replace('/','slash')
+    uid = bytes.decode(e['UID'].to_ical())
+    uid.replace('\'','')
+    uid.replace('/','slash')
     cal = Calendar()
     cal.add_component(e)
     r = requests.put('%s/%s.ics' % (base_url, uid),
@@ -47,7 +47,7 @@ def do_import(username, password, calendar, server, ics_url):
                      auth=(username, password),
                      headers={'content-type':'text/calendar; charset=UTF-8'}
                      )
-    if r.status_code == 500 and 'Sabre\VObject\Recur\NoInstancesException' in r.text:
+    if r.status_code == 500 and r'Sabre\VObject\Recur\NoInstancesException' in r.text:
       # ignore the NoInstancesException
       print('Warning: No valid instances: %s' % uid, file=sys.stdout)
     elif r.status_code == 201 or r.status_code == 204:
@@ -70,7 +70,7 @@ def do_import(username, password, calendar, server, ics_url):
         r.raise_for_status()
 
 if __name__ == '__main__':
-  Config = ConfigParser.ConfigParser()
+  Config = ConfigParser.RawConfigParser()
   Config.read(join(expanduser('~'), '.ics2owncloud.ini'))
   for key in Config.sections():
     try:
