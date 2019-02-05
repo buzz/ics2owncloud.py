@@ -26,7 +26,10 @@ def do_import(username, password, calendar, server, ics_url):
     print(e, file=sys.stderr)
     return
 
-  existing_uids = [e['UID'].to_ical() for e in target_cal.walk('VEVENT')]
+  existing_uids = []
+  for e in target_cal.walk('VEVENT'):
+    uid = bytes.decode(e['UID'].to_ical()).replace('\'', '').replace('/', 'slash')
+    existing_uids.append(uid)
 
   # fetch webcal
   sourceRequest = requests.get(ics_url)
